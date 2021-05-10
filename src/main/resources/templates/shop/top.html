@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/base-layout">
+<head>
+</head>
+<body>
+<div layout:fragment="content_div">
+	<!-- Top -->
+	<div id="top">
+		<div class="shell">
+			<!-- Header -->
+			<div id="header">
+				<h1 id="logo">
+					<a href="#"><img th:src="@{/css/images/logo.jpg}"
+						style="width: 200px; height: 61px; float: left;"></a>
+				</h1>
+				<div id="navigation">
+					<ul>
+						<li><a href="#">Home</a></li>
+						<li><a href="#">My Account</a></li>
+						<li><a href="#">My Cart</a></li>
+						<li class="last"><a href="#">Contact</a></li>
+					</ul>
+				</div>
+			</div>
+			<!-- End Header -->
+			<!-- Slider -->
+			<div id="slider">
+				<div id="slider-holder">
+					<ul>
+						<!-- <li><a href="#"><img th:src="@{/css/images/top.jpg}" alt="" /></a></li> -->
+					</ul>
+				</div>
+			</div>
+			<!-- End Slider -->
+		</div>
+	</div>
+	<!-- End Top -->
+	<!-- Main -->
+	<div id="main">
+		<div class="shell">
+			<!-- Search, etc -->
+			<div class="options">
+				<div class="search">
+					<form action="#" method="post">
+						<span class="field"> <input type="text" class="blink"
+							value="SEARCH" title="SEARCH" />
+						</span> <input type="text" class="search-submit" value="GO" />
+					</form>
+				</div>
+				<span class="left"><a href="#">Advanced Search</a></span>
+				<div class="right">
+					<span class="cart">
+						<!-- <a href="#" class="cart-ico">&nbsp;</a><strong>$0.00</strong> -->
+					</span>
+					<span class="left more-links">
+						<a href="#" id="insertBtn">商品登録</a>
+					</span>
+				</div>
+			</div>
+			<!-- End Search, etc -->
+			<!-- Content -->
+			<div id="content">
+				<div class="tabs">
+					<ul>
+						<li th:each="category : ${categories}" th:id="${'category_' + category.id}" class="categories">
+							<a href="#" class="">
+								<span th:text="${category.name}"></span>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<!-- Container -->
+				<div id="container">
+					<div class="tabbed">
+						<!-- First Tab Content -->
+						<div class="tab-content" style="display: block;">
+							<div class="items">
+								<div class="cl">&nbsp;</div>
+								<ul>
+									<li th:id="${product.id}" class="b-item" th:each="product : ${products}">
+										<div class="image">
+											<a href="#"><img th:src="@{/images/} + ${product.imagePath}" /></a>
+										</div>
+										<p>
+											Product Name: <a href="#" th:text="${product.name}"></a>
+										</p>
+										<p class="price">
+											Price: <strong th:text="${'￥' + product.price}"></strong>
+										</p>
+									</li>
+								</ul>
+								<div class="cl">&nbsp;</div>
+							</div>
+						</div>
+						<!-- End First Tab Content -->
+					</div>
+				</div>
+				<!-- End Container -->
+			</div>
+			<!-- End Content -->
+		</div>
+	</div>
+	<!-- End Main -->
+</div>
+<content layout:fragment="local_script">
+<script type="text/javascript">
+	$(document).ready(function(){
+		
+		var contextPath = getContextPath();
+		console.log("contextPath : " + contextPath);
+		
+		$(".b-item").click(function() {
+			var val = $(this).attr("id");
+			console.log("val : " + val);
+			window.location.href= contextPath + '/shop/product/' + val;
+		});
+		
+		$(document).on("click", '.categories', function() {
+			var id = $(this).attr("id");
+			id = id.substring(id.indexOf("_") + 1);
+			console.log("id : " + id);
+			window.location.href='/rosso-ec/shop/top/' + id;
+	    });
+		
+		$("#insertBtn").click(function() {
+			window.location.href='/rosso-ec/shop/product';
+		});
+		
+		
+	});
+	
+	function getContextPath() {
+		var hostIndex = location.href.indexOf( location.host ) + location.host.length;
+		var contextPath = location.href.substring( hostIndex, location.href.indexOf('/', hostIndex + 1));
+		return window.location.origin + contextPath + "";
+	};
+	
+</script>
+</content>	
+</body>
+</html>

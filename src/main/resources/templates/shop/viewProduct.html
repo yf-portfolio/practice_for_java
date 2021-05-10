@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/base-layout">
+<head>
+</head>
+<body>
+<div layout:fragment="content_div">
+	<!-- Top -->
+	<div id="product-top">
+		<div class="shell">
+			<!-- Header -->
+			<div id="header">
+				<h1 id="logo">
+					<a href="#"><img th:src="@{/css/images/logo.jpg}" style="width: 200px; height: 61px; float: left;"></a>
+				</h1>
+				<div id="navigation">
+					<ul>
+						<li><a href="#">Home</a></li>
+						<li><a href="#">My Account</a></li>
+						<li><a href="#">My Cart</a></li>
+						<li class="last"><a href="#">Contact</a></li>
+					</ul>
+				</div>
+			</div>
+			<!-- End Header -->
+		</div>
+	</div>
+	<!-- End Top -->
+	<!-- Main -->
+	<div id="main">
+		<div class="shell">
+			<!-- Search, etc -->
+			<div class="options">
+				<span class="left"><a href="#" class="ft28">商品詳細</a></span>
+			</div>
+			<!-- End Search, etc -->
+			<!-- Content -->
+			<div id="content">
+				<!-- Container -->
+				<div id="container">
+					<div class="row marketing">
+						<div class="col-lg-12">
+							<div align="center" class="pull-right">
+								<button type="button" id="bt_back" name="submit" class="btn btn-primary btn-lg">戻る</button>
+								<button type="button" id="bt_update" name="submit" class="btn btn-success btn-lg">修正</button>
+								<button type="button" id="bt_delete" name="submit" class="btn btn-danger btn-lg">削除</button>
+							</div>
+							<div class="form-area">
+								<h3 style="margin-bottom: 25px;">商品詳細</h3>
+								<img th:src="@{/images/} + ${product.imagePath}" class="img-thumbnail"/>
+								<input type="hidden" id="productId" th:value="${product.id}">
+								<h2>商品番号 : <span th:text="${product.id}"></span></h2>
+								<h2>商品名 : <span th:text="${product.name}"></span></h2>
+								<h2>カテゴリ名 : <span th:text="${product.categoryId.name}"></span></h2>
+								<h2>価格 : <span th:text="${'￥' + product.price}"></span></h2>
+								<h2>商品説明 : <span th:text="${product.description}"></span></h2>
+								<h2>登録日 : <span th:text="${product.created}"></span></h2>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- End Container -->
+			</div>
+			<!-- End Content -->
+		</div>
+	</div>
+	<!-- End Main -->
+</div>
+<content layout:fragment="local_script">
+<script type="text/javascript">
+	$(document).ready(function(){
+		//　Topページ
+		$("#bt_back").click(function(){
+			window.location.href='/rosso-ec/shop/top';
+		});
+		
+		//　商品修正ページ
+		$("#bt_update").click(function(){
+			var productId = $('#productId').val();
+			console.log("productId : " + productId);
+			window.location.href='/rosso-ec/shop/update/product/' + productId;
+		});
+		
+		// 商品削除
+		$("#bt_delete").click(function(){
+			var result = confirm("この商品を削除しますか");
+			var productId = $('#productId').val();
+			console.log("id : " + productId);
+			if (result) {
+				$.ajax({
+				  type: "POST",
+				  url: "/rosso-ec/shop/delete/product/" + productId,
+				  success: function (result) {   
+                      console.log(result);
+                      window.location = '/rosso-ec/shop/top';
+                  }
+				});
+			}
+		});
+	});
+</script>
+</content>		
+</body>
+</html>
